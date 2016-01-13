@@ -1,0 +1,71 @@
+---
+- name: Update All packages
+  become: yes
+  become_user: root
+  dnf: >
+    name=* state=latest
+  when: ansible_os_family == "RedHat"
+
+- name: Install common packages
+  become: yes
+  become_user: root
+  dnf: >
+    name={{ item }} state=latest
+  when: ansible_os_family == "RedHat"
+  with_items:
+    - "git"
+    - "polkit"
+    - "gcc"
+    - "make"
+    - "automake"
+    - "gcc-c++"
+    - "kernel-devel"
+    - "python-virtualenv"
+    - "python-devel"
+    - "htop"
+    - "nload"
+    - "mlocate"
+    - "policycoreutils-python"
+    - "tmux"
+    - "net-tools"
+    - "emacs-nox"
+    - "httpd-tools"
+    - "wget"
+    - "curl"
+    - "bind-utils"
+    - "nc"
+    - "docker"
+    - "golang"
+    - "python3-devel"
+    - "ruby"
+    - "git"
+    - "ethtool"
+    - "nodejs"
+    - "npm"
+
+- stat: path=/usr/bin/term
+  register: term
+
+- name: Remove current setup
+  command: /usr/bin/rm -rf /home/vagrant/.emacs.d
+
+- name: Fetch emacs setup repo
+  git: repo=https://github.com/PI-Victor/.emacs.d.git dest=/home/vagrant/.emacs.d clone=yes
+
+- name: copy the .emacs to ~
+  command: cp -p /home/vagrant/.emacs.d/.emacs /home/vagrant/
+
+- name: Fetch tmux setup repo
+  git: repo=https://github.com/PI-Victor/.tmux_conf.git dest=/home/vagrant/.tmux_conf clone=yes
+
+- name: copy the .tmux.conf to ~
+  command: cp -p /home/vagrant/.tmux_conf/.tmux.conf /home/vagrant/
+
+- name: Ensure docker is added to systemctl
+  service: name=docker enabled=yes state=started
+
+- name: Ensure that firewalld is off
+  service: name=firewalld enabled=no state=stopped
+
+- name: Install bower globally
+  command: /usr/bin/npm install -g bower --allow-root

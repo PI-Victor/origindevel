@@ -1,0 +1,8 @@
+---
+- hosts: origindevel
+  user: vagrant
+
+  vars_files:
+    - roles/common/vars/all
+  roles:
+    - role: common
