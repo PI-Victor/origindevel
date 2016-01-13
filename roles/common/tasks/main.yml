@@ -62,9 +62,13 @@
   command: cp -p /home/vagrant/.tmux_conf/.tmux.conf /home/vagrant/
 
 - name: Ensure docker is added to systemctl
+  become: yes
+  become_user: root
   service: name=docker enabled=yes state=started
 
 - name: Ensure that firewalld is off
+  become: yes
+  become_user: root
   service: name=firewalld enabled=no state=stopped
 
 - name: Install bower globally

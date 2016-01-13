@@ -1,6 +1,7 @@
 ---
 - hosts: origindevel
   user: vagrant
+  sudo: true
 
   vars_files:
     - roles/common/vars/all
