@@ -4,6 +4,6 @@
   sudo: true
 
   vars_files:
-    - roles/common/vars/all
+    - vars/all
   roles:
     - role: common
