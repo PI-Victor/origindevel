@@ -1,11 +1,4 @@
-# .bashrc
-
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-        . /etc/bashrc
-fi
-
-export GOPATH={{go_path}}/
+export GOPATH={{go_path}}/src
 export CDPATH=.:~:{{openshift_path}}
 export PATH=$PATH:{{origin_path}}/_output/local/bin/linux/amd64/
 export EDITOR='emacs-nox'

@@ -80,7 +80,7 @@
     - "npm"
 
 - name: Install custom .files
-  template: src=files/bashrc dest={{home_path}}/.bashrc group={{default_user_group}} owner={{default_user}}
+  template: src=bashrc dest={{home_path}}/.bashrc group={{default_user_group}} owner={{default_user}}
 
 - name: Remove current setup
   command: /usr/bin/rm -rf {{home_path}}/.emacs.d
@@ -104,20 +104,48 @@
   selinux: policy=targeted state=permissive
 
 - name: Ensure docker is added to systemctl
-  become: yes
   become_user: root
   service: name=docker enabled=yes state=started
 
 - name: Copy custom docker config and restart service
-  template: src=templates/docker dest=/etc/sysconfig/docker
-  template: src=templates/docker-storage dest=/etc/sysconfig/docker-storage
+  template: src=docker dest=/etc/sysconfig/docker
+  template: src=docker-storage dest=/etc/sysconfig/docker-storage
   notify:
     - restart docker
 
 - name: Ensure that firewalld is off
-  become: yes
   become_user: root
   service: name=firewalld enabled=no state=stopped
 
 - name: Remove dnf cached files
   command: /usr/bin/dnf clean all
+
+- name: Create /scripts
+  stat: path=/scripts
+  register: st
+  become_user: root
+
+- command: /usr/bin/mkdir /scripts
+  when: st.stat.exists == False
+
+- name: Clone rhcarvalho/openshift-devtools.git
+  git: repo=https://github.com/rhcarvalho/openshift-devtools.git dest=/scripts clone=yes
+
+# TODO: improve this and move it to a specific config
+- name: Check if we have origin v3 built and install it as a service.
+  stat: path="{{ origin_path }}"/_output/local/bin/linux/amd64/openshift
+  register: st
+
+- name: Check for and create {{home_path}}/openshift/origin
+  stat: path={{home_path}}/openshift/origin
+  register: stdir
+
+- command: /usr/bin/mkdir -p {{home_path}}/openshift/origin
+  when: stdir.stat.exists == False
+
+- template: src=openshift.service dest=/usr/lib/systemd/openshift.service
+  when: st.stat.exists
+
+- service: name=openshift state=enabled
+  notify: restart systemctl
+  when: st.stat.exists

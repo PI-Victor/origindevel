@@ -1,0 +1,15 @@
+[Unit]
+Description=OpenShift
+After=docker.service
+Requires=docker.service
+Documentation=https://github.com/openshift/origin
+
+[Service]
+Type=simple
+EnvironmentFile=-{{home_path}}openshift/origin.env
+ExecStart={{origin_path}}/_output/local/bin/linux/amd64/openshift start
+LimitNOFILE=4096
+WorkingDirectory={{home_path}}/openshift/origin
+
+[Install]
+WantedBy=multi-user.target
