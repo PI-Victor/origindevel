@@ -2,6 +2,7 @@ hostname: origin-devel
 home_path: /home/vagrant
 origin_path: /data/src/github.com/openshift/origin
 openshift_path: /data/src/github.com/openshift
+openshift_bin_path: /data/src/github.com/openshift/_output/local/bin/linux/amd64/openshift
 go_path: /data
 default_user: vagrant
 default_user_group: vagrant

@@ -1,4 +1,7 @@
 ---
+- name: Change hostname
+  hostname: name=origindevel
+
 - name: Update All packages
   become: yes
   become_user: root
@@ -82,7 +85,7 @@
 - name: Install custom .files
   template: src=bashrc dest={{home_path}}/.bashrc group={{default_user_group}} owner={{default_user}}
 
-- name: Remove current setup
+- name: Remove current emacs setup
   command: /usr/bin/rm -rf {{home_path}}/.emacs.d
 
 - name: Fetch emacs setup repo
@@ -107,11 +110,21 @@
   become_user: root
   service: name=docker enabled=yes state=started
 
-- name: Copy custom docker config and restart service
-  template: src=docker dest=/etc/sysconfig/docker
+- name: Copy custom docker-storage
   template: src=docker-storage dest=/etc/sysconfig/docker-storage
   notify:
     - restart docker
+
+- name: Copy custom docker file
+  template: src=docker dest=/etc/sysconfig/docker
+  notify:
+    - restart docker
+
+- name: Create docker user group
+  group: name=docker state=present
+
+- name: Add user to docker group
+  user: name={{default_user}} groups=docker append=yes
 
 - name: Ensure that firewalld is off
   become_user: root
@@ -125,27 +138,29 @@
   register: st
   become_user: root
 
+- name: Check for and create {{home_path}}/openshift
+  stat: path={{home_path}}/openshift
+  register: stdir
+
+- command: /usr/bin/mkdir -p {{home_path}}/openshift
+  when: stdir.stat.exists == False
+
+# TODO: improve this and move it to a specific config
+- name: Check if we have origin v3 built and install it as a service.
+  stat: path={{origin_bin_path}}/openshift
+  register: st
+
+- copy: src=files/origin dest={{home_path}}/openshift/origin
+  when: st.stat.exists
+
+- template: src=openshift.service dest=/usr/lib/systemd/system/openshift.service
+  when: st.stat.exists
+
+- service: name=openshift enabled=yes state=started
+  when: st.stat.exists
+
 - command: /usr/bin/mkdir /scripts
   when: st.stat.exists == False
 
 - name: Clone rhcarvalho/openshift-devtools.git
   git: repo=https://github.com/rhcarvalho/openshift-devtools.git dest=/scripts clone=yes
-
-# TODO: improve this and move it to a specific config
-- name: Check if we have origin v3 built and install it as a service.
-  stat: path="{{ origin_path }}"/_output/local/bin/linux/amd64/openshift
-  register: st
-
-- name: Check for and create {{home_path}}/openshift/origin
-  stat: path={{home_path}}/openshift/origin
-  register: stdir
-
-- command: /usr/bin/mkdir -p {{home_path}}/openshift/origin
-  when: stdir.stat.exists == False
-
-- template: src=openshift.service dest=/usr/lib/systemd/openshift.service
-  when: st.stat.exists
-
-- service: name=openshift state=enabled
-  notify: restart systemctl
-  when: st.stat.exists

@@ -6,10 +6,10 @@ Documentation=https://github.com/openshift/origin
 
 [Service]
 Type=simple
-EnvironmentFile=-{{home_path}}openshift/origin.env
-ExecStart={{origin_path}}/_output/local/bin/linux/amd64/openshift start
+EnvironmentFile=-{{home_path}}openshift/origin
+ExecStart={{origin_path}}/_output/local/bin/linux/amd64/openshift start $OPTIONS
 LimitNOFILE=4096
-WorkingDirectory={{home_path}}/openshift/origin
+WorkingDirectory={{home_path}}/
 
 [Install]
 WantedBy=multi-user.target

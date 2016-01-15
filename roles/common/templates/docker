@@ -6,7 +6,7 @@ DOCKER_CERT_PATH=/etc/docker
 
 # Enable insecure registry communication by appending the registry URL
 # to the INSECURE_REGISTRY variable below and uncommenting it
-INSECURE_REGISTRY='--insecure-registry 172.30.0.0/16'
+INSECURE_REGISTRY='--insecure-registry=172.30.0.0/16'
 
 # On SELinux System, if you remove the --selinux-enabled option, you
 # also need to turn on the docker_transition_unconfined boolean.

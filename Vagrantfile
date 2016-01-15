@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision :ansible do |ansible|
     ansible.limit = "origindevel"
-    ansible.verbose = "vvvv"
+    ansible.verbose = ENV["ANSIBLE_VERBOSE"] || "vvvvv"
     ansible.playbook = "origin-base.yml"
     ansible.inventory_path = "./inventory"
   end

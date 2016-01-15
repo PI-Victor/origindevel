@@ -3,3 +3,6 @@
 
 - name: restart systemctl
   command: /usr/bin/systemctl daemon-reload
+
+- name: restart openshift
+  command: /usr/sbin/service openshift restart
