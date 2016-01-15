@@ -1,15 +1,24 @@
 [Unit]
 Description=OpenShift
+Documentation=https://github.com/openshift/origin
 After=docker.service
 Requires=docker.service
-Documentation=https://github.com/openshift/origin
+After=network.target
+Requires=network.target
+After=etcd.service
+Before=origin-node.service
+
+
 
 [Service]
-Type=simple
-EnvironmentFile=-{{home_path}}openshift/origin
-ExecStart={{origin_path}}/_output/local/bin/linux/amd64/openshift start $OPTIONS
-LimitNOFILE=4096
+Type=notify
+Environment=GOTRACEBACK=crash
+EnvironmentFile={{home_path}}/openshift/origin
+ExecStart={{openshift_bin_path}}/openshift start $OPTIONS
+LimitNOFILE=131072
+LimitCORE=infinity
 WorkingDirectory={{home_path}}/
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

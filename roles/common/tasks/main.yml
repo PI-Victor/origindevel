@@ -127,40 +127,33 @@
   user: name={{default_user}} groups=docker append=yes
 
 - name: Ensure that firewalld is off
-  become_user: root
   service: name=firewalld enabled=no state=stopped
 
 - name: Remove dnf cached files
   command: /usr/bin/dnf clean all
 
 - name: Create /scripts
-  stat: path=/scripts
-  register: st
-  become_user: root
+  file: path=/scripts state=directory
 
 - name: Check for and create {{home_path}}/openshift
-  stat: path={{home_path}}/openshift
-  register: stdir
+  file: path={{home_path}}/openshift state=directory
 
-- command: /usr/bin/mkdir -p {{home_path}}/openshift
-  when: stdir.stat.exists == False
+- file: path={{home_path}}/openshift state=directory
 
 # TODO: improve this and move it to a specific config
 - name: Check if we have origin v3 built and install it as a service.
-  stat: path={{origin_bin_path}}/openshift
+  stat: path={{openshift_bin_path}}/openshift
   register: st
 
 - copy: src=files/origin dest={{home_path}}/openshift/origin
   when: st.stat.exists
 
 - template: src=openshift.service dest=/usr/lib/systemd/system/openshift.service
+  notify: restart systemctl
   when: st.stat.exists
 
 - service: name=openshift enabled=yes state=started
   when: st.stat.exists
-
-- command: /usr/bin/mkdir /scripts
-  when: st.stat.exists == False
 
 - name: Clone rhcarvalho/openshift-devtools.git
   git: repo=https://github.com/rhcarvalho/openshift-devtools.git dest=/scripts clone=yes
