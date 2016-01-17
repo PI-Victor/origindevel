@@ -19,3 +19,14 @@ Dev Stuff
 See openshift logs only with `journalctl -f -u openshift`, i suggest using `tmux` with a different split/window that outputs the logs while working.  
 
 When you provision the vagrant machine if you want to turn verbose mode down for ansible you can do `export ANSIBLE_VERBOSE='v'`.  
+
+
+Origin V3 development Workflow
+---
+* `vagrant up`
+* Code.
+* `make clean install`  
+It's encouraged to `make clean install` on your host because of vboxfs is slow and compiling inside the guest would
+* For the origin UI go to: https://localhost:8443.
+* vagrant ssh
+* `sudo service openshift restart`
