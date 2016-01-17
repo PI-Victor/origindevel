@@ -7,7 +7,7 @@ It works with VirtualBox 5 and it's recommended to be used with the vagrant [vbg
 
 Pre-built: Vagrant machine
 
-An already compiled and working vagrant box is already available at:
+An already compiled and working vagrant box will be available soon.
 
 Prerequisites:
 If you didn't compile origin so far then in your openshift repo do `make clean install`.
@@ -26,7 +26,8 @@ Origin V3 development Workflow
 * `vagrant up`
 * Code.
 * `make clean install`  
-It's encouraged to `make clean install` on your host because of vboxfs is slow and compiling inside the guest would
-* For the origin UI go to: https://localhost:8443.
+It's encouraged to `make clean install` on your host because of vboxfs is slow and compiling inside the guest would take longer.
+* For the origin UI go to: [https://localhost:8443](https://localhost:8443).
 * vagrant ssh
 * `sudo service openshift restart`
+* `/scripts/
