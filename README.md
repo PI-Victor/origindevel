@@ -95,14 +95,24 @@ You have access to the following projects and can switch between them with 'oc p
   * openshift
 
 Using project "demo".
-[vagrant@origindevel ~]$
 ```
 
-Extras
+#### Extras
 ---
 
 Every time you change something in the buildconfig of the openshift server, you need to rebuild the builder images. The official way is to do a `hack/hack/build-base-images.sh`, if you wan to save time on that, you can just do `/scripts/extras/rebuild-docker-builder` or `/scripts/extras/rebuild-s2i-builder`.  
-
-
 If you want to cleanup your openshift generated files and containers
 `/scripts/cleanup` and `/scripts/docker-cleanup` and do `sudo service openshift restart` so that openshift generates a new config to work with.
+
+Paranoid mode: you can also remove all containers and all images  with the following commands:
+
+running and non-running containers
+```
+for i in `docker ps -a | grep -v CREATED | awk '{print $1}'`; do docker rm -f $i; done
+```
+and present docker images:
+```
+for i in `docker images | grep -v IMAGE | awk '{print $3}'`; do docker rmi $i; done
+```
+
+**Remeber this will remove all images, so if you rebuilt your builder images to update the code, you need to do that again after this.**

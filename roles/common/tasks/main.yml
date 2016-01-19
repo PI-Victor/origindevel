@@ -18,6 +18,7 @@
   with_items:
     - "augeas"
     - "bzr"
+    - "bc"
     - "bridge-utils"
     - "bzip2"
     - "bind"
