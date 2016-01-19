@@ -2,7 +2,7 @@ Vagrant Fedora 23 Openshift Origin V3.
 ---
 **In active development**  
 This is an unofficial vagrant Fedora23 Image for openshift origin V3 development.
-It works with VirtualBox 5 and it's recommended to be used with the vagrant [vbguest plugin](https://github.com/dotless-de/vagrant-vbguest/).  
+It works with VirtualBox 5 and it's recommended to be used with the vagrant [vbguest plugin](https://github.com/dotless-de/vagrant-vbguest/). This will keep your virtualbox guest additions in sync with the ones installed on your system. This is crucial to this image because this image needs to mount your `$GOPATH/src` in `/data/src`.
 This image is based on [`boxcutter/fedora23`](https://atlas.hashicorp.com/boxcutter/boxes/fedora23) vagrant image.  
 
 
@@ -21,7 +21,6 @@ If you didn't compile origin so far then in your openshift repo do `make clean i
 When provisioning the vagrant machine you can also turn verbose lower with `export ANSIBLE_VERBOSE='v'`.  
 The ansible config assumes you have the binaries in `{{origin_bin_path}}/`.   
 See [vars/all](vars/all) to change that path in case you have a different arch.  
-This will mount your current `$GOPATH/src/` inside the guest at `/data/src/`.
 
 #### Origin V3 development
 ---
