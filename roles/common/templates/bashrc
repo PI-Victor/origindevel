@@ -9,5 +9,5 @@ export GOPATH={{go_path}}/
 export CDPATH=.:~:{{openshift_path}}
 export PATH=$PATH:{{openshift_bin_path}}/
 export EDITOR='emacs-nox'
-export sd='sudo docker'
-export em='emacs-nox'
+alias sd='sudo docker'
+alias em='emacs-nox'

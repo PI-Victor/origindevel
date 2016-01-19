@@ -1,7 +1,7 @@
 Vagrant Fedora 23 Openshift Origin V3.  
 ---
 **In active development**  
-This is an unofficial vagrant Fedora23 Image for openshift origin V3 development.
+This is an unofficial vagrant Fedora23 Image for Openshift Origin V3 development.
 It works with VirtualBox 5 and it's recommended to be used with the vagrant [vbguest plugin](https://github.com/dotless-de/vagrant-vbguest/). This will keep your virtualbox guest additions in sync with the ones installed on your system. This is crucial to this image because this image needs to mount your `$GOPATH/src` in `/data/src`.
 This image is based on [`boxcutter/fedora23`](https://atlas.hashicorp.com/boxcutter/boxes/fedora23) vagrant image.  
 
