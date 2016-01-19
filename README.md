@@ -1,4 +1,4 @@
-Vagrant Fedora 23 openshift Origin V3.  
+Vagrant Fedora 23 Openshift Origin V3.  
 ---
 **In active development**  
 This is an unofficial vagrant Fedora23 Image for openshift origin V3 development.
@@ -42,10 +42,11 @@ It's encouraged to `make clean install` on your host because of vboxfs is slow a
 * `/scripts/3-create-project` - creates a demo project username is `demo` pass: `a`.
 * `/scripts/4-create-image-streams` - creates most used image streams.  
 
+Besides exporting the config, the rest of the commands need to be run once. If you
+use `/scripts/cleanup` then you need to run all of the scripts again.
+
 #### Example
 ---
-
-
 ```
 Last login: Tue Jan 19 09:48:19 2016 from 10.0.2.2
 Welcome to your Packer-built virtual machine.
@@ -96,23 +97,18 @@ You have access to the following projects and can switch between them with 'oc p
 
 Using project "demo".
 ```
-
 #### Extras
 ---
-
-Every time you change something in the buildconfig of the openshift server, you need to rebuild the builder images. The official way is to do a `hack/hack/build-base-images.sh`, if you wan to save time on that, you can just do `/scripts/extras/rebuild-docker-builder` or `/scripts/extras/rebuild-s2i-builder`.  
+Every time you change something in the buildconfig of the openshift server, you need to rebuild the builder images. The official way is to do a `hack/hack/build-base-images.sh`, if you wan to save time on that, you can just do `/scripts/extras/rebuild-docker-builder` or `/scripts/extras/rebuild-s2i-builder`.    
 If you want to cleanup your openshift generated files and containers
-`/scripts/cleanup` and `/scripts/docker-cleanup` and do `sudo service openshift restart` so that openshift generates a new config to work with.
-
-Paranoid mode: you can also remove all containers and all images  with the following commands:
-
-running and non-running containers
+`/scripts/cleanup` and `/scripts/docker-cleanup` and do `sudo service openshift restart` so that openshift generates a new config to work with.  
+Paranoid mode: you can also remove all containers and all images  with the following commands:  
+running and non-running containers  
 ```
 for i in `docker ps -a | grep -v CREATED | awk '{print $1}'`; do docker rm -f $i; done
 ```
-and present docker images:
+and present docker images:  
 ```
 for i in `docker images | grep -v IMAGE | awk '{print $3}'`; do docker rmi $i; done
 ```
-
-**Remeber this will remove all images, so if you rebuilt your builder images to update the code, you need to do that again after this.**
+**Remeber this will remove all images, so if you rebuilt your builder images to update the code, you need to do that again after this.**  
