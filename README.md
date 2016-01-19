@@ -21,6 +21,7 @@ If you didn't compile origin so far then in your openshift repo do `make clean i
 When provisioning the vagrant machine you can also turn verbose lower with `export ANSIBLE_VERBOSE='v'`.  
 The ansible config assumes you have the binaries in `{{origin_bin_path}}/`.   
 See [vars/all](vars/all) to change that path in case you have a different arch.  
+This images uses `4096` MB of RAM by default, if you want to change that, you can `export ORIGINDEVEL_MEMORY=xxxx`, i recommend at least 2048 MB.
 
 #### Origin V3 development
 ---
@@ -36,7 +37,7 @@ It's encouraged to `make clean install` on your host because of vboxfs is slow a
 #### Before using oc:  
 
 (These steps will be automated later)  
-* `source /scripts/1-export-config` set config ENV variables for openshift. - needs to be set everytime you log in.  
+* `source /scripts/1-export-config` set config ENV variables for openshift. - needs to be set every time you log in.  
 * `/scripts/2-create-registry-and-router` - creates a registry and router, needs to be run only once.  
 * `/scripts/3-create-project` - creates a demo project username is `demo` pass: `a`.
 * `/scripts/4-create-image-streams` - creates most used image streams.  

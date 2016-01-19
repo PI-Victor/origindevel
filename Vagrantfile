@@ -8,7 +8,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |vb|
     # Customize the amount of memory on the VM:
-    vb.memory = "4048"
+    vb.memory = ENV["ORIGINDEVEL_MEMORY"] || "4096"
     vb.name = "origindevel"
   end
     config.vm.network "private_network", ip: '10.245.2.2'
