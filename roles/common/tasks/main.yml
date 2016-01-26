@@ -16,6 +16,7 @@
     name={{ item }} state=latest
   when: ansible_os_family == "RedHat"
   with_items:
+    - "akmod-VirtualBox"
     - "augeas"
     - "bzr"
     - "bc"
@@ -59,6 +60,9 @@
     - "automake"
     - "gcc-c++"
     - "kernel-devel"
+    - "kernel-headers"
+    - "kernel-tools-libs"
+    - "kernel-tools-libs-devel"
     - "python"
     - "python-virtualenv"
     - "python-devel"
@@ -83,23 +87,45 @@
     - "nodejs"
     - "npm"
 
+- name: Restart guest to load the latest kernel
+  shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+  async: 1
+  poll: 0
+  sudo: true
+  ignore_errors: true
+
+- name: Waiting for server to come back up
+  local_action: wait_for host=10.245.2.2 state=started delay=20 timeout=300
+  sudo: false
+
+- name: Rebuild kernel modules
+  shell: akmods --kernel $(uname -r)
+
+- name: Restart vboxadd.service
+  service: name=vboxadd state=restarted
+
+- name: Restart guest to load the latest akmods module
+  shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+  async: 1
+  poll: 0
+  sudo: true
+  ignore_errors: true
+
+- name: Waiting for server to come back up
+  local_action: wait_for host=10.245.2.2 state=started delay=20 timeout=300
+  sudo: false
+
 - name: Install custom .files
   template: src=bashrc dest={{home_path}}/.bashrc group={{default_user_group}} owner={{default_user}}
 
-- name: Remove current emacs setup
+- name: Replace current emacs setup
   command: /usr/bin/rm -rf {{home_path}}/.emacs.d
+- git: repo=https://github.com/PI-Victor/.emacs.d.git dest={{home_path}}/.emacs.d clone=yes
+- command: cp -p {{home_path}}/.emacs.d/.emacs {{home_path}}/
 
-- name: Fetch emacs setup repo
-  git: repo=https://github.com/PI-Victor/.emacs.d.git dest={{home_path}}/.emacs.d clone=yes
-
-- name: Copy the .emacs to ~
-  command: cp -p {{home_path}}/.emacs.d/.emacs {{home_path}}/
-
-- name: Fetch tmux setup repo
+- name: Fetch tmux setup
   git: repo=https://github.com/PI-Victor/.tmux_conf.git dest={{home_path}}/.tmux_conf clone=yes
-
-- name: Copy the .tmux.conf to ~
-  command: cp -p {{home_path}}/.tmux_conf/.tmux.conf {{home_path}}/
+- command: cp -p {{home_path}}/.tmux_conf/.tmux.conf {{home_path}}/
 
 - name: Install bower globally
   command: /usr/bin/npm install -g bower --allow-root
@@ -109,7 +135,7 @@
 
 - name: Ensure docker is added to systemctl
   become_user: root
-  service: name=docker enabled=yes state=started
+  service: name=docker enabled=yes state=restarted
 
 - name: Copy custom docker-storage
   template: src=docker-storage dest=/etc/sysconfig/docker-storage
@@ -139,22 +165,12 @@
 - name: Check for and create {{home_path}}/openshift
   file: path={{home_path}}/openshift state=directory
 
-- file: path={{home_path}}/openshift state=directory
-
 # TODO: improve this and move it to a specific config
-- name: Check if we have origin v3 built and install it as a service.
-  stat: path={{openshift_bin_path}}/openshift
-  register: st
-
-- copy: src=files/origin dest={{home_path}}/openshift/origin
-  when: st.stat.exists
-
+- name: Install Openshift Origin V3 as a service from your host mounted $GOPATH
+  copy: src=files/origin dest={{home_path}}/openshift/origin
 - template: src=openshift.service dest=/usr/lib/systemd/system/openshift.service
   notify: restart systemctl
-  when: st.stat.exists
-
 - service: name=openshift enabled=yes state=started
-  when: st.stat.exists
 
 - name: Clone rhcarvalho/openshift-devtools.git
   git: repo=https://github.com/rhcarvalho/openshift-devtools.git dest=/scripts clone=yes

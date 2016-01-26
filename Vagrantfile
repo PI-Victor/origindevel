@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
                       http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
                       http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
   SHELL
-
+  config.trigger.after :provision, :execute => "vagrant reload"
   config.vm.provision :ansible do |ansible|
     ansible.limit = "origindevel"
     ansible.verbose = ENV["ANSIBLE_VERBOSE"] || "vvvv"
