@@ -4,16 +4,8 @@ Vagrant Fedora 23 Openshift Origin V3.
 This is an unofficial vagrant Fedora23 Image for Openshift Origin V3 development.
 
 #### Dependencies:  
-Helps reload the vagrant machine after a kernel update.  
-[vagrant-triggers](https://github.com/emyl/vagrant-triggers)
+[vbguest plugin](https://github.com/dotless-de/vagrant-vbguest/) - keeps your virtualbox guest additions in sync with the host, this is crucial because this image needs to mount your `$GOPATH/src` in `/data/src`. If you don't have a `$GOPATH` then it will default to `$HOME/go`.  [vagrant-reload](https://github.com/aidanns/vagrant-reload) - used to reload the vagrant image while provisioning so that it can load the new compiled kernel modules for virtualbox guest additions.  
 
-Keeps your virtualbox guest additions in sync with the host
-[vbguest plugin](https://github.com/dotless-de/vagrant-vbguest/).
-
-
-
-with the ones installed on your system. This is crucial to this image because this image needs to mount your `$GOPATH/src` in `/data/src`.
-If you don't have a `$GOPATH` then it will default to `$HOME/go`.
 This image is based on [`boxcutter/fedora23`](https://atlas.hashicorp.com/boxcutter/boxes/fedora23) vagrant image.  
 
 
@@ -32,7 +24,7 @@ If you didn't compile origin so far then in your openshift repo do `make clean i
 When provisioning the vagrant machine you can also turn verbose lower with `export ANSIBLE_VERBOSE='v'`.  
 The ansible config assumes you have the binaries in `{{origin_bin_path}}/`.   
 See [vars/all](vars/all) to change that path in case you have a different arch.  
-This images uses `4096` MB of RAM by default, if you want to change that, you can `export ORIGINDEVEL_MEMORY=xxxx`, i recommend at least 2048 MB.
+This images uses `4096` MB of RAM by default, if you want to change that, you can `export ORIGINDEVEL_MEMORY=xxxx`, i recommend at least 2048 MB.  
 
 #### Origin V3 development
 ---

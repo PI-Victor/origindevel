@@ -8,8 +8,6 @@ Requires=network.target
 After=etcd.service
 Before=origin-node.service
 
-
-
 [Service]
 Type=notify
 Environment=GOTRACEBACK=crash

@@ -1,0 +1,98 @@
+---
+- name: Install RPM Fusion rpms (Free and NonFree)
+  dnf: name={{ item }} state=latest
+  when: ansible_os_family == "RedHat"
+  with_items:
+      - "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-23.noarch.rpm"
+      - "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-23.noarch.rpm"
+
+- name: Update system packages and install custom packages
+  dnf: name=* state=latest
+- dnf: >
+    name={{ item }} state=latest
+  when: ansible_os_family == "RedHat"
+  with_items:
+    - "akmod-VirtualBox"
+    - "automake"
+    - "augeas"
+    - "bzr"
+    - "bc"
+    - "bridge-utils"
+    - "bzip2"
+    - "bind"
+    - "bind-utils"
+    - "btrfs-progs-devel"
+    - "ctags"
+    - "curl"
+    - "device-mapper-devel"
+    - "docker"
+    - "ethtool"
+    - "e2fsprogs"
+    - "emacs-nox"
+    - "ethtool"
+    - "fontconfig"
+    - "glibc-static"
+    - "gnuplot"
+    - "git"
+    - "golang"
+    - "gcc-c++"
+    - "gcc"
+    - "httpd-tools"
+    - "httpie"
+    - "hg"
+    - "htop"
+    - "jq"
+    - "kernel-devel"
+    - "kernel-headers"
+    - "kernel-tools-libs"
+    - "kernel-tools-libs-devel"
+    - "libselinux-devel"
+    - "libnetfilter_queue-devel"
+    - "make"
+    - "mlocate"
+    - "nload"
+    - "nc"
+    - "nodejs"
+    - "net-tools"
+    - "npm"
+    - "ntp"
+    - "openldap-clients"
+    - "openvswitch"
+    - "policycoreutils-python"
+    - "python"
+    - "python3"
+    - "python-virtualenv"
+    - "python-devel"
+    - "python3-devel"
+    - "ruby"
+    - "rubygems"
+    - "rubygem-bundler"
+    - "screen"
+    - "socat"
+    - "sqlite-devel"
+    - "sysstat"
+    - "tig"
+    - "tmux"
+    - "unzip"
+    - "vim"
+    - "VirtualBox-kmodsrc"
+    - "wget"
+    - "xfsprogs"
+    - "Xvfb"
+
+- name: Restart guest to load the latest kernel
+  shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+  async: 1
+  poll: 0
+  sudo: true
+  ignore_errors: true
+
+- name: Waiting for guest to come back up
+  local_action: wait_for host=10.245.2.2 state=started delay=30 timeout=400
+  sudo: false
+
+- name: Rebuild kernel modules
+  shell: akmods --kernel $(uname -r)
+
+- name: Restart vboxadd.service
+  service: name=vboxadd state=restarted

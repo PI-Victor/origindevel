@@ -7,3 +7,6 @@ su -c 'dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-rel
 
 
 make $OPTIONS in .service work  
+
+
+separate dnf update and install from setting the image up so that it reloads the vagrant machine with the new kernel images
