@@ -1,4 +1,7 @@
 ---
+- name: Set hostname to origindevel
+  hostname: name=origindevel
+  
 - name: Install RPM Fusion rpms (Free and NonFree)
   dnf: name={{ item }} state=latest
   when: ansible_os_family == "RedHat"
