@@ -9,5 +9,7 @@ export GOPATH={{go_path}}/
 export CDPATH=.:~:{{openshift_path}}
 export PATH=$PATH:{{openshift_bin_path}}/
 export EDITOR='emacs-nox'
+export CURL_CA_BUNDLE={{openshift_config_path}}/master/ca.crt
+export KUBECONFIG={{openshift_config_path}}/master/admin.kubeconfig
 alias sd='sudo docker'
 alias em='emacs-nox'

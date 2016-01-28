@@ -2,6 +2,9 @@ hostname: origin-devel
 home_path: /home/vagrant
 origin_path: /data/src/github.com/openshift/origin
 openshift_path: /data/src/github.com/openshift
+openshift_config_path: /home/vagrant/openshift.local.config
+openshift_volumes_path: /home/vagrant/openshift.local.volumes
+openshift_etcd_path: /home/vagrant/openshift.etcd.volumes
 openshift_bin_path: /data/src/github.com/openshift/origin/_output/local/bin/linux/amd64
 go_path: /data
 default_user: vagrant
