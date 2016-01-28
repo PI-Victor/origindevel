@@ -100,6 +100,17 @@ You have access to the following projects and can switch between them with 'oc p
 
 Using project "demo".
 ```
+#### Adding options to openshift start
+
+If you want to add more options for the `openshift server` then you have to edit `/home/vagrant/openshift/origin`.
+
+```
+# here you can define your own start parameters for 'openshift start' command
+OPTIONS='--public-master=localhost --latest-images=true'
+```
+
+and the do `sudo service openshift restart`
+
 #### Extras
 ---
 Every time you change something in the buildconfig of the openshift server, you need to rebuild the builder images. The official way is to do a `hack/hack/build-base-images.sh`, if you wan to save time on that, you can just do `/scripts/extras/rebuild-docker-builder` or `/scripts/extras/rebuild-s2i-builder`.    
