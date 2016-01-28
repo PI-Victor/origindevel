@@ -112,6 +112,6 @@ for i in `docker ps -a | grep -v CREATED | awk '{print $1}'`; do docker rm -f $i
 ```
 and present docker images:  
 ```
-for i in `docker images | grep -v IMAGE | awk '{print $3}'`; do docker rmi $i; done
+for i in `docker images | grep -v IMAGE | awk '{print $3}'`; do docker rmi -f $i; done
 ```
 **Remeber this will remove all images, so if you rebuilt your builder images to update the code, you need to do that again after this.**  
