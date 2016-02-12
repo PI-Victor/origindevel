@@ -2,13 +2,13 @@
 # vi: set ft=ruby :
 Vagrant.require_version '>= 1.7.0'
 
-REQUIRED_PLUGINS = %w(vagrant-triggers vagrant-reload)
+REQUIRED_PLUGINS = %w( vagrant-triggers vagrant-reload )
 
-exit unless REQUIRED_PLUGINS.all? do |plugin|
+REQUIRED_PLUGINS.each do |plugin|
   Vagrant.has_plugin?(plugin) || (
-    puts 'The #{plugin} plugin is required. Please install it with:'
-    puts '$ vagrant plugin install #{plugin}'
-    false
+    puts 'The ' +  plugin + ' plugin is required. Please install it with: '
+    puts '$ vagrant plugin install ' + plugin
+    exit
   )
 end
 
