@@ -1,2 +1,2 @@
 # here you can define your own start parameters for 'openshift start' command
-OPTIONS='--public-master=localhost'
+OPTIONS='--public-master=localhost --latest-images=true'
