@@ -24,10 +24,10 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider 'virtualbox' do |vb|
     # Customize the amount of memory on the VM:
-    unless File.exist?(file_to_disk)
-      vb.customize ['createhd', '--filename', file_to_disk, '--size', 200 * 1024]
-      vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
-    end
+    # unless File.exist?(file_to_disk)
+    #   vb.customize ['createhd', '--filename', file_to_disk, '--size', 200 * 1024]
+    #   vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
+    # end
     vb.memory = origin_memory
     vb.name = 'origindevel'
     vb.cpus = 2
