@@ -4,8 +4,10 @@ Vagrant Fedora 23 Openshift Origin V3.
 This is an unofficial vagrant Fedora23 Image for Openshift Origin V3 development.
 
 #### Dependencies:  
-[vbguest plugin](https://github.com/dotless-de/vagrant-vbguest/) - keeps your virtualbox guest additions in sync with the host, this is crucial because this image needs to mount your `$GOPATH/src` in `/data/src`. If you don't have a `$GOPATH` then it will default to `$HOME/go`.  [vagrant-reload](https://github.com/aidanns/vagrant-reload) - used to reload the vagrant image while provisioning so that it can load the new compiled kernel modules for virtualbox guest additions.  
+[vagrant-triggers](https://github.com/emyl/vagrant-triggers) - Triggers to allow the machine to reboot.  
+[vagrant-reload](https://github.com/aidanns/vagrant-reload) - used to reload the vagrant image while provisioning so that it can load the new compiled kernel modules for virtualbox guest additions.  
 
+So before procedding *vagrant plugin install vagrant-triggers* and *vagrant plugin install vagrant-reload*.   
 This image is based on [`boxcutter/fedora23`](https://atlas.hashicorp.com/boxcutter/boxes/fedora23) vagrant image.  
 
 
@@ -109,7 +111,7 @@ If you want to add more options for the `openshift server` then you have to edit
 OPTIONS='--public-master=localhost --latest-images=true'
 ```
 
-and the do `sudo service openshift restart`
+and then do `sudo service openshift restart` for the server to take the new options.
 
 #### Extras
 ---
