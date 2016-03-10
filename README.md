@@ -22,7 +22,7 @@ vagrant up
 
 #### Prerequisites:
 ---
-If you didn't compile origin so far then in your openshift repo do `make clean install`.  
+If you didn't compile origin so far then in your openshift repo do `make clean build`.  
 When provisioning the vagrant machine you can also turn verbose lower with `export ANSIBLE_VERBOSE='v'`.  
 The ansible config assumes you have the binaries in `{{origin_bin_path}}/`.   
 See [vars/all](vars/all) to change that path in case you have a different arch.  
