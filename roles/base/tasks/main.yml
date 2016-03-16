@@ -91,7 +91,7 @@
   ignore_errors: true
 
 - name: Waiting for guest to come back up
-  local_action: wait_for host=10.245.2.2 state=started delay=30 timeout=400
+  local_action: wait_for host=10.245.2.2 state=started delay=20 timeout=600
   sudo: false
 
 - name: Rebuild kernel modules

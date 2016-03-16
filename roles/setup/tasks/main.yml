@@ -1,5 +1,10 @@
 ---
+- name: Install cleanup script and make it executable
+  copy: src=files/cleanup dest={{home_path}} owner=vagrant group=vagrant mode=0755
 
+- name: Make sure /data is owned by vagrant
+  file: path=/data state=directory owner=vagrant group=vagrant mode=0775
+  
 - name: Install custom .files
   template: src=bashrc dest={{home_path}}/.bashrc group={{default_user_group}} owner={{default_user}}
 

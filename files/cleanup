@@ -1,0 +1,18 @@
+echo "Stopping openshift"
+sudo service openshift stop
+echo "Cleaning up stopped and running containers"
+for i in `docker ps -a | grep -v CONTAINER | awk '{print $1}'`; do docker rm -f $i; done
+echo "Cleaning up docker images"
+for i in `docker images | grep -v IMAGE | awk '{print $3}'`; do docker rmi -f $i; done
+echo "Pulling s2i openshift builder image"
+docker pull openshift/origin-sti-builder
+echo "Pulling docker openshift builder image"
+docker pull openshift/origin-docker-builder
+echo "Pulling origin-deployer"
+docker pull openshift/origin-deployer
+echo "Pulling origin-pod"
+docker pull openshift/origin-pod
+echo "Pulling origin-docker-registry"
+docker pull openshift/origin-docker-registry
+echo "Starting Openshift"
+sudo service openshift start

@@ -6,10 +6,12 @@ if [ -f /etc/bashrc ]; then
 fi
 
 export GOPATH={{go_path}}/
+export GOBINPATH={{go_path}}/bin
 export CDPATH=.:~:{{openshift_path}}
-export PATH=$PATH:{{openshift_bin_path}}/
+export PATH={{openshift_bin_path}}/:$GOBINPATH:$PATH
 export EDITOR='emacs-nox'
 export CURL_CA_BUNDLE={{openshift_config_path}}/master/ca.crt
 export KUBECONFIG={{openshift_config_path}}/master/admin.kubeconfig
+export GO15VENDOREXPERIMENT=1
 alias sd='sudo docker'
 alias em='emacs-nox'
