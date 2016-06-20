@@ -4,14 +4,13 @@
 
 - name: Make sure /data is owned by vagrant
   file: path=/data state=directory owner=vagrant group=vagrant mode=0775
-  
+
 - name: Install custom .files
   template: src=bashrc dest={{home_path}}/.bashrc group={{default_user_group}} owner={{default_user}}
 
 - name: Replace current emacs setup
   command: /usr/bin/rm -rf {{home_path}}/.emacs.d
 - git: repo=https://github.com/PI-Victor/.emacs.d.git dest={{home_path}}/.emacs.d clone=yes
-- command: cp -p {{home_path}}/.emacs.d/.emacs {{home_path}}/
 
 - name: Fetch tmux setup
   git: repo=https://github.com/PI-Victor/.tmux_conf.git dest={{home_path}}/.tmux_conf clone=yes
