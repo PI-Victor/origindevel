@@ -1,7 +1,4 @@
 ---
-- name: Install cleanup script and make it executable
-  copy: src=files/cleanup dest={{home_path}} owner=vagrant group=vagrant mode=0755
-
 - name: Make sure /data is owned by vagrant
   file: path=/data state=directory owner=vagrant group=vagrant mode=0775
 
@@ -10,10 +7,12 @@
 
 - name: Replace current emacs setup
   command: /usr/bin/rm -rf {{home_path}}/.emacs.d
+  
 - git: repo=https://github.com/PI-Victor/.emacs.d.git dest={{home_path}}/.emacs.d clone=yes
 
 - name: Fetch tmux setup
   git: repo=https://github.com/PI-Victor/.tmux_conf.git dest={{home_path}}/.tmux_conf clone=yes
+  
 - command: cp -p {{home_path}}/.tmux_conf/.tmux.conf {{home_path}}/
 
 - name: Install bower globally
@@ -22,18 +21,17 @@
 - name: Switch SElinux to permissive mode.
   selinux: policy=targeted state=permissive
 
-- name: Create docker user group
+- name: Create docker user group and add vagrant user to it
   group: name=docker state=present
-
-- name: Add user to docker group
-  user: name={{default_user}} groups=docker append=yes
+  
+- user: name={{default_user}} groups=docker append=yes
 
 - name: Setup Docker config
   template: src=docker-storage dest=/etc/sysconfig/docker-storage
+  
 - template: src=docker dest=/etc/sysconfig/docker
 
 - name: Ensure docker is added to systemctl
-  become_user: root
   service: name=docker enabled=yes state=restarted
 
 - name: Ensure that firewalld is off
@@ -41,16 +39,18 @@
 
 - name: Create needed directories
   file: path=/scripts state=directory
+  
 - file: path={{home_path}}/openshift state=directory
 
 # TODO: improve this and move it to a specific config
 - name: Install Openshift Origin V3 as a service from your host mounted $GOPATH
   copy: src=files/origin dest={{home_path}}/openshift/origin
+  
 - template: src=openshift.service dest=/usr/lib/systemd/system/openshift.service
 - service: name=openshift enabled=yes state=started
 
-- name: Clone rhcarvalho/openshift-devtools.git
-  git: repo=https://github.com/rhcarvalho/openshift-devtools.git dest=/scripts clone=yes
+- name: Clone pi-victor/openshift-devtools.git
+  git: repo=https://github.com/pi-victor/openshift-devtools.git dest=/scripts clone=yes
 
 - name: Remove dnf cached files
   command: /usr/bin/dnf clean all
