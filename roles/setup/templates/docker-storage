@@ -11,4 +11,4 @@
 # one for data).
 # DOCKER_STORAGE_OPTIONS = --storage-opt dm.metadatadev=/dev/mylogvol/my-docker-metadata --storage-opt dm.datadev=/dev/mylogvol/my-docker-data
 
-DOCKER_STORAGE_OPTIONS= --storage-opt dm.no_warn_on_loop_devices=true
+#DOCKER_STORAGE_OPTIONS= --storage-opt dm.no_warn_on_loop_devices=true
