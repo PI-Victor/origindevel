@@ -42,13 +42,6 @@
   
 - file: path={{home_path}}/openshift state=directory
 
-# TODO: improve this and move it to a specific config
-- name: Install Openshift Origin V3 as a service from your host mounted $GOPATH
-  copy: src=files/origin dest={{home_path}}/openshift/origin
-  
-- template: src=openshift.service dest=/usr/lib/systemd/system/openshift.service
-- service: name=openshift enabled=yes state=started
-
 - name: Clone pi-victor/openshift-devtools.git
   git: repo=https://github.com/pi-victor/openshift-devtools.git dest=/scripts clone=yes
 
