@@ -13,13 +13,12 @@ REQUIRED_PLUGINS.each do |plugin|
 end
 
 VAGRANT_ROOT = File.dirname(File.expand_path(__FILE__))
-file_to_disk = File.join(VAGRANT_ROOT, 'dockerstorage.vmdk')
 ansible_verbosity = ENV['ANSIBLE_VERBOSE'] || 'vvvv'
 origin_memory =  ENV['ORIGINDEVEL_MEMORY'] || '4096'
 go_path = ENV['GOPATH'] || File.join(ENV['HOME'], 'go/')
 
 Vagrant.configure(2) do |config|
-  config.vm.box = 'boxcutter/fedora23'
+  config.vm.box = 'boxcutter/fedora24'
   config.vm.synced_folder go_path, '/data/', id: 'vagrant',
   owner: 'vagrant',
   group: 'vagrant',
